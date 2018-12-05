@@ -11,5 +11,11 @@ module Innumerate
     def to_schema
       "  set_statistics_target #{table.inspect}, #{column.inspect}, #{target}"
     end
+
+    def ==(other)
+      (table == other.table) &&
+        (column == other.column) &&
+        (target == other.target)
+    end
   end
 end

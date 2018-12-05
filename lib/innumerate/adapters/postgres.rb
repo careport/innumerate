@@ -26,7 +26,9 @@ module Innumerate
             AND NOT a.attisdropped
         }
 
-        execute(query).map(&method(:to_statistics_target))
+        execute(query).
+          map(&method(:to_statistics_target)).
+          sort_by { |target| [target.table, target.column] }
       end
 
       def current_statistics_target(table, column)
