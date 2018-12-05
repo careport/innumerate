@@ -18,6 +18,8 @@ module Innumerate
       Innumerate.database.set_statistics_target(table, column, target)
     end
 
+    private
+
     def validate_target!(name, value)
       unless value.is_a?(Integer)
         raise ArgumentError, "#{name} must be an integer; given: #{value}"
