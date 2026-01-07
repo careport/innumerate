@@ -6,7 +6,7 @@ RSpec.describe Innumerate::Statements do
     allow(Innumerate).to receive(:database).and_return(adapter)
   end
 
-  describe "set_statistics_target" do
+  describe "#set_statistics_target" do
     it "sets the statistics target to the requested value" do
       connection.set_statistics_target :widgets, :quantity, 1000
 
@@ -20,6 +20,33 @@ RSpec.describe Innumerate::Statements do
 
       expect { connection.set_statistics_target :widgets, :quantity, 50000 }.
         to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#set_reloptions" do
+    it "sets the reloptions for a table" do
+      connection.set_reloptions(:widgets, { autovacuum_enabled: false })
+
+      expect(Innumerate.database).to have_received(:set_reloptions).
+        with(:widgets, { autovacuum_enabled: false })
+    end
+  end
+
+  describe "#set_reloption" do
+    it "sets a single reloption for a table" do
+      connection.set_reloption(:widgets, :autovacuum_enabled, false)
+
+      expect(Innumerate.database).to have_received(:set_reloptions).
+        with(:widgets, { autovacuum_enabled: false })
+    end
+  end
+
+  describe "#reset_reloptions" do
+    it "resets reloptions for a table" do
+      connection.reset_reloptions(:widgets, [:autovacuum_enabled])
+
+      expect(Innumerate.database).to have_received(:reset_reloptions).
+        with(:widgets, [:autovacuum_enabled])
     end
   end
 
