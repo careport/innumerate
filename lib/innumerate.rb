@@ -1,6 +1,7 @@
 require "innumerate/adapters/postgres"
 require "innumerate/command_recorder"
 require "innumerate/railtie"
+require "innumerate/reloption"
 require "innumerate/schema_dumper"
 require "innumerate/statements"
 require "innumerate/statistics_target"

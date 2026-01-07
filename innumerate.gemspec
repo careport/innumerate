@@ -11,6 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = <<-DESCRIPTION
     Adds `set_statistics_target` method to ActiveRecord::Migration to manage
     per-column statistics targets for the PostgreSQL query planner
+    and per-table autovacuum settings
   DESCRIPTION
   spec.homepage = "https://github.com/careport/innumerate"
   spec.license = "MIT"
@@ -27,5 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activerecord", ">= 5.0.0"
   spec.add_dependency "railties", ">= 5.0.0"
 
-  spec.required_ruby_version = ">= 2.3"
+  spec.required_ruby_version = ">= 3.2"
 end

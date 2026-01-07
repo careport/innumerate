@@ -24,6 +24,61 @@ RSpec.describe Innumerate::Adapters::Postgres, db: true do
     end
   end
 
+  describe "#set_reloptions" do
+    it "sets reloptions for a particular table" do
+      adapter.set_reloptions(:widgets, {
+        autovacuum_enabled: true,
+        autovacuum_vacuum_scale_factor: 0.666,
+        autovacuum_vacuum_insert_scale_factor: 0.555,
+        autovacuum_vacuum_threshold: 5000000
+      })
+      options = adapter.reloptions_for(:widgets)
+
+      expect(options).to eq(
+        "autovacuum_enabled" => "true",
+        "autovacuum_vacuum_scale_factor" => "0.666",
+        "autovacuum_vacuum_insert_scale_factor" => "0.555",
+        "autovacuum_vacuum_threshold" => "5000000"
+      )
+    end
+  end
+
+  describe "#reset_reloptions" do
+    it "removes reloptions from a table" do
+      adapter.set_reloptions(:widgets, {
+        autovacuum_enabled: true,
+        autovacuum_vacuum_scale_factor: 0.666,
+        autovacuum_vacuum_insert_scale_factor: 0.555,
+        autovacuum_vacuum_threshold: 5000000
+      })
+      adapter.reset_reloptions(:widgets, [
+        :autovacuum_enabled,
+        :autovacuum_vacuum_threshold
+      ])
+      options = adapter.reloptions_for(:widgets)
+
+      expect(options).to eq(
+        "autovacuum_vacuum_scale_factor" => "0.666",
+        "autovacuum_vacuum_insert_scale_factor" => "0.555",
+      )
+    end
+  end
+
+  describe "#reloptions" do
+    it "returns an Innumerate::Reloption for each reloption in the database" do
+      adapter.set_reloptions(:widgets, {
+        autovacuum_enabled: true,
+        autovacuum_vacuum_scale_factor: 0.666
+      })
+      reloptions = adapter.reloptions
+
+      expect(reloptions).to contain_exactly(
+        Innumerate::Reloption.new("widgets", "autovacuum_enabled", "true"),
+        Innumerate::Reloption.new("widgets", "autovacuum_vacuum_scale_factor", "0.666")
+      )
+    end
+  end
+
   def adapter
     @adapter ||= Innumerate::Adapters::Postgres.new
   end

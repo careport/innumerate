@@ -18,6 +18,34 @@ module Innumerate
       Innumerate.database.set_statistics_target(table, column, target)
     end
 
+    # Sets reloptions for a table
+    #
+    # @param table [String, Symbol] The name of the table to alter
+    # @param option_hash [Hash] A hash mapping reloption names to their values
+    # @return The database driver's response
+    def set_reloptions(table, option_hash)
+      Innumerate.database.set_reloptions(table, option_hash)
+    end
+
+    # Sets a single reloption for a table
+    #
+    # @param table [String, Symbol] The name of the table to alter
+    # @param option [String, Symbol] The name of the option
+    # @param value [Any] The value of the option
+    # @return The database driver's response
+    def set_reloption(table, option, value)
+      Innumerate.database.set_reloptions(table, { option => value })
+    end
+
+    # Resets reloptions to their defaults for a table
+    #
+    # @param table [String, Symbol] The name of the table to alter
+    # @param options [Array] The names of the reloptions to reset
+    # @return The database driver's response
+    def reset_reloptions(table, options)
+      Innumerate.database.reset_reloptions(table, options)
+    end
+
     private
 
     def validate_target!(name, value)
